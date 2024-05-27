@@ -172,3 +172,5 @@ jobs:
         with:
           name: qBittorrent-CI_Windows-x64_libtorrent-${{ matrix.libt_version }}
           path: upload
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS }}
