@@ -1,6 +1,6 @@
 /*
  * Bittorrent Client using Qt and libtorrent.
- * Copyright (C) 2021  Mike Tzou (Chocobo1)
+ * Copyright (C) 2016  Alexandr Milovantsev <dzmat@yandex.ru>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,20 +28,37 @@
 
 #pragma once
 
-#define QBT_VERSION_MAJOR 4
-#define QBT_VERSION_MINOR 6
-#define QBT_VERSION_BUGFIX 5
-#define QBT_VERSION_BUILD 10
-#define QBT_VERSION_STATUS ""  // Should be empty for stable releases!
+#include <QDialog>
 
-#define QBT__STRINGIFY(x) #x
-#define QBT_STRINGIFY(x) QBT__STRINGIFY(x)
+#include "base/settingvalue.h"
 
-#if (QBT_VERSION_BUILD != 0)
-#define PROJECT_VERSION QBT_STRINGIFY(QBT_VERSION_MAJOR.QBT_VERSION_MINOR.QBT_VERSION_BUGFIX.QBT_VERSION_BUILD) QBT_VERSION_STATUS
-#else
-#define PROJECT_VERSION QBT_STRINGIFY(QBT_VERSION_MAJOR.QBT_VERSION_MINOR.QBT_VERSION_BUGFIX) QBT_VERSION_STATUS
-#endif
+class QSortFilterProxyModel;
+class QStringListModel;
 
-#define QBT_VERSION "v" PROJECT_VERSION
-#define QBT_VERSION_2 PROJECT_VERSION
+namespace Ui
+{
+    class ShadowBanListOptionsDialog;
+}
+
+class ShadowBanListOptionsDialog final : public QDialog
+{
+    Q_OBJECT
+    Q_DISABLE_COPY_MOVE(ShadowBanListOptionsDialog)
+
+public:
+    explicit ShadowBanListOptionsDialog(QWidget *parent = nullptr);
+    ~ShadowBanListOptionsDialog() override;
+
+private slots:
+    void on_buttonBox_accepted();
+    void on_buttonBanIP_clicked();
+    void on_buttonDeleteIP_clicked();
+    void on_txtIP_textChanged(const QString &ip);
+
+private:
+    Ui::ShadowBanListOptionsDialog *m_ui = nullptr;
+    SettingValue<QSize> m_storeDialogSize;
+    QStringListModel *m_model = nullptr;
+    QSortFilterProxyModel *m_sortFilter = nullptr;
+    bool m_modified = false;
+};
